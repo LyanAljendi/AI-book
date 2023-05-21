@@ -26,7 +26,8 @@ def reducePossibilities(board, possibilities):
             if board[i][j] == 0:
                 # Cell is filled with a number, don't need to check the possibilities.
                 possibilities[i][j] = np.array(
-                    [p if valid(board, (i, j), p) else -1 for p in range(1, 10)]
+                    [p if valid(board, (i, j), p) else -
+                     1 for p in range(1, 10)]
                 )
     return possibilities
 
@@ -40,7 +41,8 @@ def getCellToExplore(heuristics):
     Finally get a random cell from all the best cells.
     """
     cell = choice(
-        np.dstack(np.where(heuristics == np.amin(heuristics[heuristics > 0])))[0]
+        np.dstack(np.where(heuristics == np.amin(
+            heuristics[heuristics > 0])))[0]
     )
     return cell
 
@@ -75,7 +77,8 @@ class SearchSolver:
         Solve the board with Search
         """
         if not isFull(self.game.board):
-            possibilities = reducePossibilities(self.game.board, self.possibilities)
+            possibilities = reducePossibilities(
+                self.game.board, self.possibilities)
             # Adapts the possible numbers for each cell
             self.heuristics = updateHeuristics(
                 self.game.board, self.heuristics, possibilities
@@ -90,21 +93,23 @@ class SearchSolver:
                     if event.type == pygame.QUIT:
                         sys.exit()
                 self.game.tries += 1
+
                 self.game.board[cell[0]][cell[1]] = number
+                '''
                 self.game.tiles[cell[0]][cell[1]].value = number
-                self.game.tiles[cell[0]][cell[1]].correct = True
+                self.game.tiles[cell[0]][cell[1]].correct = True'''
 
                 # pygame.time.delay(63) #show tiles at a slower rate
 
-                self.game.redraw({}, wrong, time.time() - self.startTime)
+               # self.game.redraw({}, wrong, time.time() - self.startTime)
                 if self.visualSolve(wrong):
                     # Then, we try to solve the sudoku starting from the updated board
                     return True
             self.game.board[cell[0]][cell[1]] = 0
-            self.game.tiles[cell[0]][cell[1]].value = 0
-            self.game.tiles[cell[0]][cell[1]].incorrect = True
-            self.game.tiles[cell[0]][cell[1]].correct = False
+            #self.game.tiles[cell[0]][cell[1]].value = 0
+            #self.game.tiles[cell[0]][cell[1]].incorrect = True
+            #self.game.tiles[cell[0]][cell[1]].correct = False
             # pygame.time.delay(63)
-            self.game.redraw({}, wrong, time.time() - self.startTime)
+           # self.game.redraw({}, wrong, time.time() - self.startTime)
             return False
         return True

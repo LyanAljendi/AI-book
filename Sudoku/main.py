@@ -7,8 +7,9 @@ import random
 import argparse
 from pathlib import Path
 import numpy as np
-from search import SearchSolver
+from search4 import SearchSolver
 from genetic_algorithm import GeneticSolver
+import time
 
 
 def readSudokus(filename):
@@ -368,7 +369,24 @@ def main():
                             board.tiles[i][j].selected = False
                     keyDict = {}  # clear keyDict out
 
-                    solver.visualSolve(wrong)
+                    f = open("sudokus/sudokus.txt")
+                    sum = 0
+                    for i in range(100):
+
+                        res = None
+                        txt = f.readline().strip()
+                        if txt != "":
+                            res = [[int(txt[i + j * 9])
+                                    for i in range(9)] for j in range(9)]
+                        board.board = np.array(res)
+                        start = time.time()
+                        solver = SearchSolver(board, start)
+                        was_solved = solver.visualSolve(wrong)
+                        end = time.time()
+                        print(i, " ",  was_solved, "\n", (end - start))
+                        sum += (end - start)
+                    print(sum/100)
+                    f.close()
 
                     for i in range(9):
                         for j in range(9):

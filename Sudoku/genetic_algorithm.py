@@ -175,7 +175,8 @@ class Genetic_Algorithm:
         self.elitism_percentage = 0.08
         self.best_score = -1000
         self.nb_gen_with_same_score = 0
-        self.max_nb_gen_with_same_score = (81 - max_nb_gen_with_same_score) // 2
+        self.max_nb_gen_with_same_score = (
+            81 - max_nb_gen_with_same_score) // 2
         self.population.generate_initial_population(self.generation_size)
         self.population.sort_chromosomes_on_fitness_score()
 
@@ -186,12 +187,13 @@ class Genetic_Algorithm:
         We keep the best chromosomes given by the crossover and some from the mutation operation.
         We keep a small amount of random chromosomes.
         """
-        new_chromosomes_from_crossover.sort(key=lambda x: x.score, reverse=True)
+        new_chromosomes_from_crossover.sort(
+            key=lambda x: x.score, reverse=True)
 
         next_population_chromosomes = (
             elite_chromosomes
             + new_chromosomes_from_crossover[
-                0 : int(
+                0: int(
                     (1 - self.elitism_percentage - 0.1) * self.generation_size
                 )
             ]
@@ -200,7 +202,7 @@ class Genetic_Algorithm:
             new_chromosomes_from_crossover[
                 int(
                     (1 - self.elitism_percentage - 0.1) * self.generation_size
-                ) :
+                ):
             ]
         )
         random.shuffle(new_chromosomes_from_crossover_other_random)
@@ -208,7 +210,7 @@ class Genetic_Algorithm:
         next_population_chromosomes = (
             next_population_chromosomes
             + new_chromosomes_from_crossover_other_random[
-                0 : int(0.05 * self.generation_size)
+                0: int(0.05 * self.generation_size)
             ]
         )
 
@@ -247,7 +249,7 @@ class Genetic_Algorithm:
 
         # Elitism: Keep the best results from previous generation
         elite_chromosomes = self.population.chromosomes[
-            0 : int(self.generation_size * self.elitism_percentage)
+            0: int(self.generation_size * self.elitism_percentage)
         ]
         random.shuffle(elite_chromosomes)
         new_chromosomes_from_crossover = []
