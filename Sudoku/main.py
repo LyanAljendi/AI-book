@@ -2,13 +2,13 @@ from sudoku_alg import valid, solve, find_empty
 from copy import deepcopy
 import sys
 import pygame
-import time
 import random
 import argparse
 from pathlib import Path
 import numpy as np
-from search4 import SearchSolver
-from genetic_algorithm import GeneticSolver
+from solving_algorithms.genetic import GeneticSolver
+from solving_algorithms.visual_search import SearchSolver
+from solving_algorithms.optimized_search import OptimizedSearchSolver
 import time
 
 
@@ -224,9 +224,17 @@ def main():
         "-a",
         "--algorithm",
         help="Choose the algorithm to execute",
-        choices=["search", "genetic"],
+        choices=["genetic", "visual_search", "optimized_search"],
     )
-    parser.add_argument("-f", "--file", help="Sudoky instance to solve")
+    parser.add_argument(
+        "-f",
+        "--file",
+        help="Sudoku instance to solve")
+    parser.add_argument(
+        "-hf",
+        "--heuristic",
+        help="Heuristic function used by optimized_search",
+        choices=["smallest_dof", "smallest_dof_and_local_impact"])
     args = parser.parse_args()
 
     screen = pygame.display.set_mode((540, 590))
@@ -243,8 +251,8 @@ def main():
     screen.blit(text, (230, 290))
     pygame.display.flip()
 
-    # initiliaze values and variables
-    startTime = time.time()
+    # initialize values and variables
+    start_time = time.time()
     wrong = 0
     if args.file and Path(args.file).is_file():
         board = Board(screen, args.file)
@@ -254,10 +262,12 @@ def main():
         )
         board = Board(screen)
 
-    if args.algorithm == "search":
-        solver = SearchSolver(board, startTime)
+    if args.algorithm == "visual_search":
+        solver = SearchSolver(board, start_time)
     elif args.algorithm == "genetic":
-        solver = GeneticSolver(board, startTime)
+        solver = GeneticSolver(board, start_time)
+    elif args.algorithm == "optimized_search":
+        solver = OptimizedSearchSolver(board, start_time, args.heuristic == "smallest_dof_and_local_impact")
     else:
         parser.print_help()
         print()
@@ -272,7 +282,7 @@ def main():
     keyDict = {}
     running = True
     while running:
-        elapsed = time.time() - startTime
+        elapsed = time.time() - start_time
 
         if (
             board.board.all() == board.solvedBoard.all()
@@ -368,26 +378,13 @@ def main():
                         for j in range(9):
                             board.tiles[i][j].selected = False
                     keyDict = {}  # clear keyDict out
-
-                    f = open("sudokus/sudokus.txt")
-                    sum = 0
-                    for i in range(100):
-
-                        res = None
-                        txt = f.readline().strip()
-                        if txt != "":
-                            res = [[int(txt[i + j * 9])
-                                    for i in range(9)] for j in range(9)]
-                        board.board = np.array(res)
-                        start = time.time()
-                        solver = SearchSolver(board, start)
-                        was_solved = solver.visualSolve(wrong)
-                        end = time.time()
-                        print(i, " ",  was_solved, "\n", (end - start))
-                        sum += (end - start)
-                    print(sum/100)
-                    f.close()
-
+                    start = time.time()
+                    success = solver.visualSolve(wrong)
+                    end = time.time()
+                    if success:
+                        print("The sudoku was successfully solved in " + str(round(end - start, 3)) + "s")
+                    else:
+                        print("The sudoku could not be solved")
                     for i in range(9):
                         for j in range(9):
                             board.tiles[i][j].correct = False
