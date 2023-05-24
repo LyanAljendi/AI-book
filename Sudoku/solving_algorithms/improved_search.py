@@ -177,7 +177,7 @@ class EmptyCellsBuffer:
         return self.size == 0
 
 
-class OptimizedSearchSolver:
+class ImprovedSearchSolver:
     """
     Main search algorithm to solve a Sudoku game 9x9
     """

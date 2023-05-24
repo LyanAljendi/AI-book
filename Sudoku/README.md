@@ -74,11 +74,11 @@ Launch the sudoku game
 
 optional arguments:
   -h, --help            show this help message and exit
-  -a {search,genetic}, --algorithm {search,genetic}
+  -a {genetic,visual_search,improved_search}, --algorithm {genetic,visual_search,improved_search}
                         Choose the algorithm to execute
   -f FILE, --file FILE  Sudoku instance to solve
   -hf {smallest_dof, smallest_dof_and_local_impact}, --heuristic {smallest_dof,smallest_dof_and_local_impact}
-                        Choose the heuristic function of optimized_search
+                        Choose the heuristic function of improved_search
 ```
 
 [ia-gh]: https://github.com/iridia-ulb/AI-book

@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 from solving_algorithms.genetic import GeneticSolver
 from solving_algorithms.visual_search import SearchSolver
-from solving_algorithms.optimized_search import OptimizedSearchSolver
+from solving_algorithms.improved_search import ImprovedSearchSolver
 import time
 
 
@@ -224,7 +224,7 @@ def main():
         "-a",
         "--algorithm",
         help="Choose the algorithm to execute",
-        choices=["genetic", "visual_search", "optimized_search"],
+        choices=["genetic", "visual_search", "improved_search"],
     )
     parser.add_argument(
         "-f",
@@ -233,7 +233,7 @@ def main():
     parser.add_argument(
         "-hf",
         "--heuristic",
-        help="Heuristic function used by optimized_search",
+        help="Heuristic function used by improved_search",
         choices=["smallest_dof", "smallest_dof_and_local_impact"])
     args = parser.parse_args()
 
@@ -266,8 +266,8 @@ def main():
         solver = SearchSolver(board, start_time)
     elif args.algorithm == "genetic":
         solver = GeneticSolver(board, start_time)
-    elif args.algorithm == "optimized_search":
-        solver = OptimizedSearchSolver(board, start_time, args.heuristic == "smallest_dof_and_local_impact")
+    elif args.algorithm == "improved_search":
+        solver = ImprovedSearchSolver(board, start_time, args.heuristic == "smallest_dof_and_local_impact")
     else:
         parser.print_help()
         print()
