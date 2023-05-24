@@ -34,7 +34,7 @@ poetry install
 Vous pouvez ensuite lancer le jeu dans l'environnement virtuel nouvellement créé.
 Le jeu en mode recherche se lance comme ceci:
 ```bash
-poetry run python main.py -f sudokus/sudoku1.txt -a optimized_search -hf smallest_dof
+poetry run python main.py -f sudokus/sudoku1.txt -a improved_search -hf smallest_dof
 ```
 Une fois lancé, vous pouvez jouer vous même avec la grille en entrant les chiffres
 en utilisant à votre clavier et votre souris; ou alors *lancer l'IA* en appuyant sur 
@@ -57,7 +57,7 @@ Voici un exemple de contenu de fichier sudoku :
 ### Sélection de l'algorithme de résolution
 Pour selectionner l'algorithme à utiliser dans le jeu, changez l'option `-a` dans la ligne de commande.
 Cette option peut prendre 3 valeurs, `genetic` pour l'algorithme génétique, `visual_search` pour l'algorithme de recherche
-dont l'exécution est visualisée, ou `optimized_search` pour l'algorithme de recherche optimisé, s'exécutant en un temps minimal.
+dont l'exécution est visualisée, ou `improved_search` pour l'algorithme de recherche optimisé, s'exécutant en un temps minimal.
 Pour ce dernier, un argument supplémentaire est obligatoire : `-hf`.
 
 ### Sélection de la fonction heuristique
@@ -68,7 +68,7 @@ les cellules ayant peu de différentes valeurs possibles **et** étant impactée
 
 ### En résumé:
 ```
-usage: main.py [-h] [-f FILE] [-a {genetic, visual_search, optimized_search}] [-hf {smallest_dof, smallest_dof_and_local_impact}]
+usage: main.py [-h] [-f FILE] [-a {genetic, visual_search, improved_search}] [-hf {smallest_dof, smallest_dof_and_local_impact}]
 
 Launch the sudoku game
 
